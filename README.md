@@ -1,4 +1,4 @@
-##Identifying information
+## Information:
 Name of Programmer: Divya Reddy Konda,
 Language: Bash,
 Version: version 4.4.20(1),
