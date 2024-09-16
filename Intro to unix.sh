@@ -1,7 +1,7 @@
 # Create a directory titled "Informatics_573" 
 mkdir Informatics_573 
 # To navigate the created directory 
-cd Infornatics_573
+cd Informatics_573
 # To download all secondary assemblies for human chromosome 1 from UCSC Genome browser
 wget -r -np -nd -A 'chr1_*' https://hgdownload.soe.ucsc.edu/goldenPath/hg38/chromosomes/
 # Unzip all of the downloaded chromosome 1 assemblies
