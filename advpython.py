@@ -65,9 +65,15 @@ print("Genes with fold change magnitude > 5:")
 print(high_fold_change_genes.head())
 
 QUESTION-1G
+# Filter rows where the absolute value of 'Fold Change' is greater than 5
+high_fold_change_genes = merged_data[abs(merged_data['Fold Change']) > 5]
+
+# Add a new column to indicate whether the gene is higher expressed in "Normal" or "Tumor"
+# If the fold change is positive, the gene is higher expressed in "Tumor"
+# If the fold change is negative, the gene is higher expressed in "Normal"
 high_fold_change_genes['Expression_Status'] = high_fold_change_genes['Fold Change'].apply(
     lambda x: 'Tumor' if x > 0 else 'Normal'
 )
-# Print the updated dataframe to check the result
-print("Genes with fold change magnitude > 4 and expression status:")
+# Print the result to check the first few rows
+print("Genes with fold change magnitude > 5 and expression status:")
 print(high_fold_change_genes.head())
