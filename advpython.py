@@ -42,6 +42,7 @@ print(tumor_data.head())
 print("\nNormal Data:")
 print(normal_data.head())
 
+
 QUESTION-1D
 # Compute the average expression for each probe from the 2 data sets
 tumor_avg_expression = tumor_data.mean(axis=1)
@@ -51,18 +52,27 @@ print(tumor_avg_expression.head())
 print("\nNormal Average Expression:")
 print(normal_avg_expression.head())
 
+
 QUESTION-1E
 # Determine the fold change for each probe between the two groups
 fold_change = (tumor_avg_expression - normal_avg_expression) / normal_avg_expression
 print("Fold Change:")
 print(fold_change.head())
 
+
 QUESTION-1F
-merged_data = pd.merge(fold_change_df, gene_info, left_on='Probe', right_on='Probe_ID')
+fold_change_df = fold_change.to_frame('Fold Change')  # Convert Series to DataFrame with a named column
+fold_change_df.reset_index(inplace=True)  # Reset the index
+fold_change_df.rename(columns={'index': 'Probe_ID'}, inplace=True)  # Rename the index column
+
+# Convert 'Probe_ID' column to a common data type
+fold_change_df['Probe_ID'] = fold_change_df['Probe_ID'].astype(str)
+gene_information['Probe_ID'] = gene_information['Probe_ID'].astype(str)
+
+merged_data = pd.merge(fold_change_df, gene_information, left_on='Probe_ID', right_on='Probe_ID')
 # Identify genes with a fold change magnitude (absolute value) greater than 5
 high_fold_change_genes = merged_data[abs(merged_data['Fold Change']) > 5]
-print("Genes with fold change magnitude > 5:")
-print(high_fold_change_genes.head())
+
 
 QUESTION-1G
 # Filter rows where the absolute value of 'Fold Change' is greater than 5
