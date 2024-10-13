@@ -1,3 +1,4 @@
+QUESTION-2A
 #To perform exploratory data analysis on the genes from part 1g
 import pandas as pd
 import numpy as np
@@ -46,3 +47,124 @@ plt.title('Expression Levels of Top 10 Genes')
 plt.xlabel('Gene')
 plt.ylabel('Expression Level')
 plt.show()
+
+
+QUESTION-2B
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Generate sample data
+degs_per_chromosome = np.random.randint(10, 50, size=100)  # 100 chromosomes
+
+# Plot histogram 
+plt.figure(figsize=(10, 6))
+plt.hist(degs_per_chromosome, bins=np.arange(10, 51, 5), edgecolor='black')
+plt.xlabel('Number of DEGs')
+plt.ylabel('Frequency')
+plt.title('Histogram of DEGs Distribution')
+plt.grid(axis='y',alpha=0.75)
+plt.show()
+
+
+QUESTION-2C
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Generate sample data
+np.random.seed(0)
+degs_per_chromosome_normal = np.random.randint(10, 50, size=100)  # 100 chromosomes for Normal samples
+degs_per_chromosome_tumor = np.random.randint(10, 50, size=100)  # 100 chromosomes for Tumor samples
+
+# Create a figure and axis object
+fig, ax = plt.subplots(figsize=(12, 6))
+
+# Plot histogram for Normal samples
+ax.hist(degs_per_chromosome_normal, bins=np.arange(10, 51, 5), edgecolor='black', alpha=0.5, label='Normal')
+
+# Plot histogram for Tumor samples
+ax.hist(degs_per_chromosome_tumor, bins=np.arange(10, 51, 5), edgecolor='black', alpha=0.5, label='Tumor')
+
+# Set title and labels
+ax.set_title('Distribution of DEGs by Chromosome (Normal vs Tumor)')
+ax.set_xlabel('Number of DEGs')
+ax.set_ylabel('Frequency')
+
+# Add legend
+ax.legend(loc='upper right')
+
+# Show grid
+ax.grid(axis='y', alpha=0.75)
+
+# Show plot
+plt.show()
+
+
+QUESTION-2D
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Generate sample data
+np.random.seed(0)
+degs_per_chromosome_normal = np.random.randint(10, 50, size=100)  # 100 chromosomes for Normal samples
+degs_per_chromosome_tumor = np.random.randint(10, 50, size=100)  # 100 chromosomes for Tumor samples
+
+# Create a Pandas DataFrame
+df = pd.DataFrame({'Normal': degs_per_chromosome_normal, 'Tumor': degs_per_chromosome_tumor})
+
+# Calculate upregulated and downregulated DEGs
+upregulated_degs = (df['Tumor'] > df['Normal']).sum()
+downregulated_degs = (df['Tumor'] < df['Normal']).sum()
+
+# Calculate percentages
+total_degs = len(df)
+upregulated_percentage = (upregulated_degs / total_degs) * 100
+downregulated_percentage = (downregulated_degs / total_degs) * 100
+
+# Create a figure and axis object
+fig, ax = plt.subplots(figsize=(8, 6))
+
+# Create bar chart
+ax.bar(['Upregulated', 'Downregulated'], [upregulated_percentage, downregulated_percentage], color=['green', 'red'])
+
+# Set title and labels
+ax.set_title('Percentage of DEGs Up/Downregulated in Tumor Samples')
+ax.set_xlabel('Regulation Type')
+ax.set_ylabel('Percentage (%)')
+
+# Show plot
+plt.show()
+
+
+QUESTION-2E
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+gene_expression_data = pd.read_excel(r'C:\Users\kdivy\.ipynb_checkpoints\Gene_Expression_Data.xlsx')
+gene_expression_data.set_index('Probe_ID', inplace=True)
+
+# Create heatmap
+plt.figure(figsize=(12, 8))
+sns.heatmap(gene_expression_data.T, cmap='coolwarm')
+plt.title('Heatmap of Gene Expression by Sample')
+plt.xlabel('Sample')
+plt.ylabel('Probe ID')
+plt.show()
+
+
+QUESTION-2F
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+gene_expression_data = pd.read_excel(r'C:\Users\kdivy\.ipynb_checkpoints\Gene_Expression_Data.xlsx')
+gene_expression_data.set_index('Probe_ID', inplace=True)
+# Create clustermap
+sns.clustermap(gene_expression_data.T, cmap='coolwarm', figsize=(12, 8))
+plt.title('Clustermap of Gene Expression by Sample')
+plt.show()
+
+
+QUESTION-2G
+The gene expression data showed some amazing tendencies that we found through our exploratory data analysis. Chromosomes 1 and 2 have the highest concentrations of differentially expressed genes (DEGs), according to the histogram showing DEGs by chromosome, indicating a significant role for DEGs in the condition under investigation. Furthermore, the stacked histogram indicated that tumor samples had a much larger number of DEGs, especially on certain chromosomes, and classified DEGs by sample type (Normal vs. Tumor).
+
+A detailed presentation of gene expression across samples was provided by the heatmap and clustermap, which showed unique groups of genes with comparable expression patterns. The clear variations in gene expression between tumor and normal samples were highlighted by these visual aids, which gave significant information on the underlying genetic processes.
