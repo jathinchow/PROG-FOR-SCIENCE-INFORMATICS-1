@@ -54,15 +54,27 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Generate sample data
+# Generate an array of 100 random integers between 10 and 50 (inclusive) to represent the number of DEGs per chromosome
 degs_per_chromosome = np.random.randint(10, 50, size=100)  # 100 chromosomes
 
 # Plot histogram 
+# Create a new figure with a specified size (10 inches wide, 6 inches tall)
 plt.figure(figsize=(10, 6))
+
+# Create a histogram of the DEGs per chromosome data, with bins ranging from 10 to 50 in increments of 5, and a black edge color
 plt.hist(degs_per_chromosome, bins=np.arange(10, 51, 5), edgecolor='black')
+
+# Set the x-axis label to "Number of DEGs"
 plt.xlabel('Number of DEGs')
+
+# Set the y-axis label to "Frequency"
 plt.ylabel('Frequency')
+
+# Set the title of the histogram to "Histogram of DEGs Distribution"
 plt.title('Histogram of DEGs Distribution')
 plt.grid(axis='y',alpha=0.75)
+
+# Display the histogram
 plt.show()
 
 
@@ -95,7 +107,7 @@ ax.legend(loc='upper right')
 # Show grid
 ax.grid(axis='y', alpha=0.75)
 
-# Show plot
+# Display the histogram
 plt.show()
 
 
@@ -131,7 +143,7 @@ ax.set_title('Percentage of DEGs Up/Downregulated in Tumor Samples')
 ax.set_xlabel('Regulation Type')
 ax.set_ylabel('Percentage (%)')
 
-# Show plot
+# Display the bar chart
 plt.show()
 
 
@@ -145,10 +157,19 @@ gene_expression_data.set_index('Probe_ID', inplace=True)
 
 # Create heatmap
 plt.figure(figsize=(12, 8))
+# Create a heatmap of the gene expression data, with the rows and columns transposed (i.e., samples as rows and probe IDs as columns)
 sns.heatmap(gene_expression_data.T, cmap='coolwarm')
+
+# Set the title of the heatmap to "Heatmap of Gene Expression by Sample"
 plt.title('Heatmap of Gene Expression by Sample')
+
+# Set the x-axis label to "Sample"
 plt.xlabel('Sample')
+
+# Set the y-axis label to "Probe ID"
 plt.ylabel('Probe ID')
+
+# Display the heatmap
 plt.show()
 
 
@@ -158,9 +179,15 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 gene_expression_data = pd.read_excel(r'C:\Users\kdivy\.ipynb_checkpoints\Gene_Expression_Data.xlsx')
 gene_expression_data.set_index('Probe_ID', inplace=True)
+
 # Create clustermap
+# Create a clustermap of the gene expression data, with the rows and columns (i.e., samples as rows and probe IDs as columns); 
 sns.clustermap(gene_expression_data.T, cmap='coolwarm', figsize=(12, 8))
+
+# Set the title of the clustermap to "Clustermap of Gene Expression by Sample"
 plt.title('Clustermap of Gene Expression by Sample')
+
+# Display the clustermap
 plt.show()
 
 
