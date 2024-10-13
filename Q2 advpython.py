@@ -165,6 +165,9 @@ plt.show()
 
 
 QUESTION-2G
-The gene expression data showed some amazing tendencies that we found through our exploratory data analysis. Chromosomes 1 and 2 have the highest concentrations of differentially expressed genes (DEGs), according to the histogram showing DEGs by chromosome, indicating a significant role for DEGs in the condition under investigation. Furthermore, the stacked histogram indicated that tumor samples had a much larger number of DEGs, especially on certain chromosomes, and classified DEGs by sample type (Normal vs. Tumor).
+The gene expression data showed some amazing tendencies that we found through our exploratory data analysis.
+Chromosomes 1 and 2 have the highest concentrations of differentially expressed genes (DEGs), according to the histogram showing DEGs by chromosome, indicating a significant role for DEGs in the condition under investigation. 
+Furthermore, the stacked histogram indicated that tumor samples had a much larger number of DEGs, especially on certain chromosomes, and classified DEGs by sample type (Normal vs. Tumor).
 
-A detailed presentation of gene expression across samples was provided by the heatmap and clustermap, which showed unique groups of genes with comparable expression patterns. The clear variations in gene expression between tumor and normal samples were highlighted by these visual aids, which gave significant information on the underlying genetic processes.
+A detailed presentation of gene expression across samples was provided by the heatmap and clustermap, which showed unique groups of genes with comparable expression patterns. 
+The clear variations in gene expression between tumor and normal samples were highlighted by these visual aids, which gave significant information on the underlying genetic processes.
