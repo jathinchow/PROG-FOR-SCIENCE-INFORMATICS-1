@@ -89,30 +89,28 @@ plt.show()
 
 
 QUESTION-2D
+#To perform exploratory data analysis on the genes from part 1g
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
-# Generate sample data
-np.random.seed(0)
-degs_per_chromosome_normal = np.random.randint(10, 50, size=100)  # 100 chromosomes for Normal samples
-degs_per_chromosome_tumor = np.random.randint(10, 50, size=100)  # 100 chromosomes for Tumor samples
-# Create a Pandas DataFrame
+import seaborn as sns
+# Create a DataFrame with differential expression data
 df = pd.DataFrame({'Normal': degs_per_chromosome_normal, 'Tumor': degs_per_chromosome_tumor})
-# Calculate upregulated and downregulated DEGs
+# Calculate the number of upregulated and downregulated genes in tumor samples
 upregulated_degs = (df['Tumor'] > df['Normal']).sum()
 downregulated_degs = (df['Tumor'] < df['Normal']).sum()
-# Calculate percentages
 total_degs = len(df)
+# Calculate the percentage of upregulated and downregulated genes
 upregulated_percentage = (upregulated_degs / total_degs) * 100
 downregulated_percentage = (downregulated_degs / total_degs) * 100
-# Create a figure and axis object
+# Create a bar plot to visualize the percentage of up/downregulated DEGs
 fig, ax = plt.subplots(figsize=(8, 6))
-# Create bar chart
+# Plot a bar chart with upregulated genes in green and downregulated in red
 ax.bar(['Upregulated', 'Downregulated'], [upregulated_percentage, downregulated_percentage], color=['green', 'red'])
-# Set title and labels
+# Add title and labels to the plot
 ax.set_title('Percentage of DEGs Up/Downregulated in Tumor Samples')
-ax.set_xlabel('Regulation Type')
 ax.set_ylabel('Percentage (%)')
-# Display the bar chart
+# Display the plot
 plt.show()
 
 
