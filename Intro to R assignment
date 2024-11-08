@@ -68,3 +68,93 @@ names(counts_list) <- paste0("Kilobase_", 1:chunks)
 counts_list
 
 
+## Question-4
+## 4-a
+# Count occurrences of nucleotides in the first 1000 base pairs
+first_kilobase_counts <- counts_list[[1]]
+
+# Create a data frame with columns for each nucleotide count
+# The data frame will have one row with counts for A, C, G, and T
+df <- data.frame(
+  A = first_kilobase_counts["A"],
+  C = first_kilobase_counts["C"],
+  G = first_kilobase_counts["G"],
+  T = first_kilobase_counts["T"]
+)
+
+# Display the data frame
+print(df)
+
+
+## 4-b
+# Initialize a data frame to hold counts for each kilobase
+# Use lapply to iterate over each element in counts_list and create a data frame for each kilobase
+kilobase_df <- do.call(rbind, lapply(1:length(counts_list), function(i) {
+  counts <- counts_list[[i]]  # Get counts for the current kilobase
+
+# Create a data frame for the current kilobase with nucleotide counts
+  data.frame(
+    Kilobase = paste0("Kilobase_", i),
+    A = counts["A"],
+    C = counts["C"],
+    G = counts["G"],
+    T = counts["T"]
+  )
+}))
+# Display the resulting data frame
+print(kilobase_df)
+
+
+## 4-c
+# Create a single row data frame for each kilobase's counts and combine them
+combined_df <- do.call(rbind, lapply(1:length(counts_list), function(i) {
+  counts <- counts_list[[i]]  # Get counts for the current kilobase
+  data.frame(
+    Kilobase = paste0("Kilobase_", i),
+    A = as.numeric(counts["A"]),
+    C = as.numeric(counts["C"]),
+    G = as.numeric(counts["G"]),
+    T = as.numeric(counts["T"])
+  )
+}))
+
+# Display the resulting data frame
+print(combined_df)
+
+
+## 4-d
+# Calculate the sum of each row and add it as a new column to the data frame
+combined_df$Total <- rowSums(combined_df[, c("A", "C", "G", "T")])
+
+# Adjust the max.print option dynamically based on the size of the data frame
+options(max.print = nrow(combined_df) * ncol(combined_df))
+
+# Print the entire data frame without truncation
+print(combined_df, row.names = FALSE)
+
+
+## 4-e
+#4-e .1
+# Expected sum for each list is 1000, except possibly the last chunk if the sequence length is not a multiple of 1000
+expected_sum <- 1000
+
+#4-e .2
+# Identify lists whose sums differ from the expected value
+expected_value <- 1000
+discrepant_rows <- combined_df[combined_df$Total != expected_value, ]
+
+# Print the rows with discrepancies, if any
+if (nrow(discrepant_rows) > 0) {
+  cat("The following kilobases have sums that differ from the expected value of", expected_value, ":\n")
+  print(discrepant_rows)
+} else {
+  cat("All kilobase sums are equal to the expected value of", expected_value, ".\n")
+}
+
+#4-e .3
+#In case some of the observed sums do not coincide with the expected values, it may be due to several causes:
+Data Quality Issues: Errors during data collection or processing can lead to incorrect counts. This might include miscounts, missing values, or inaccuracies in data entry.
+Biological Variability: Nucleotide composition can differ significantly across various biological samples. If the samples are heterogeneous, it can cause deviations from anticipated counts.
+Sampling Bias: Using non-random or biased sampling methods can distort the data, producing unexpected results.
+Technical Artifacts: Some biases can be introduced by sequencing technologies. For example, sequencing or PCR amplification errors may cause some overrepresentation of certain nucleotides.
+Normalization Errors: If the data was not normalized properly, that would change the inflated or deflated counts for some nucleotides and cause discrepancies in the results.
