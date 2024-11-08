@@ -1,1 +1,70 @@
+## Question-1
+# Set the file path to your sequence file
+file_path <- "C:/Users/kdivy/.ipynb_checkpoints/chr1_GL383518v1_alt.fa"
+
+# Read the sequence file, skipping the first line in FASTA files
+sequence_lines <- readLines(file_path)[-1]
+
+# Concatenate all lines into a single string for the complete DNA sequence
+sequence <- paste(sequence_lines, collapse = "")
+
+# Print the 10th letter of the sequence
+cat("10th letter of the sequence:", substr(sequence, 10, 10), "\n")
+
+# Print the 758th letter of the sequence
+cat("758th letter of the sequence:", substr(sequence, 758, 758), "\n")
+
+
+## Question-2
+# Set the file path to your sequence file
+file_path <- "C:/Users/kdivy/.ipynb_checkpoints/chr1_GL383518v1_alt.fa"
+
+# Read and process the sequence
+# readLines reads all lines from the file, and warn = FALSE suppresses warnings about incomplete final lines
+# [-1] removes the first line, which is typically a header line in FASTA files
+# paste combines the remaining lines into a single string
+sequence <- paste(readLines(file_path, warn = FALSE)[-1], collapse = "")
+
+# Convert the entire sequence to uppercase to standardize the nucleotide representation
+sequence <- toupper(sequence)
+
+# Generate the reverse complement
+# chartr replaces each base with its complement: A <-> T and C <-> G
+# strsplit splits the string into individual characters
+# rev reverses the order of the characters
+# paste combines the reversed characters back into a single string
+reverse_complement <- paste(rev(strsplit(chartr("ATCG", "TAGC", sequence), NULL)[[1]]), collapse = "")
+
+# substring extracts the 79th letter from the reverse complement sequence
+cat("The 79th letter of the reverse complement sequence is:", substring(reverse_complement, 79, 79), "\n")
+# substring extracts the letters from the 500th to the 800th position of the reverse complement sequence
+cat("The 500th to 800th letters of the reverse complement sequence are:\n", substring(reverse_complement, 500, 800), "\n")
+
+
+## Question-3
+# Set the file path to your sequence file
+file_path <- "C:/Users/kdivy/.ipynb_checkpoints/chr1_GL383518v1_alt.fa"
+
+# Read the sequence from the file
+# readLines reads all lines from the file
+# grepl("^>") identifies header lines that start with ">", and filter these out
+# do.call(paste0, as.list(...)) concatenates the remaining lines into a single string (the DNA sequence)
+sequence <- do.call(paste0, as.list(readLines(file_path)[!grepl("^>", readLines(file_path))]))
+
+# Calculate the number of chunks (kilobases) needed
+# Each kilobase is 1000 base pairs, so we divide the total length of the sequence by 1000 and round up
+chunks <- ceiling(nchar(sequence) / 1000)
+
+# Create a list to store counts of nucleotides for each kilobase
+# Extract a substring of 1000 characters from the sequence
+# Split into individual characters and convert them into a list of single characters
+# 'factor' ensures we count only levels specified (A, C, G, T) even if not all are present
+counts_list <- lapply(1:chunks, function(i) table(factor(strsplit(substr(sequence, (i-1)*1000 + 1, min(i*1000, nchar(sequence))), "")[[1]], levels = c("A", "C", "G", "T"))))
+
+# Name each element of the list based on the chunk number
+names(counts_list) <- paste0("Kilobase_", 1:chunks)
+
+# Display the list of counts, where each element shows counts of A, C, G, and T
+counts_list
+
 
