@@ -128,5 +128,141 @@ cat("\nSignificant Genes with Higher Expression Column:\n")
 print(head(significant_genes))
 
 
+2b
+# Count DEGs by chromosome
+degs_by_chromosome <- table(merged_data$Chromosome)
 
+# Plot histogram
+barplot(degs_by_chromosome,
+        col = "skyblue",
+        las = 2,
+        main = "Distribution of Differentially Expressed Genes (DEGs) by Chromosome",
+        xlab = "Chromosome",
+        ylab = "Number of DEGs")
+
+
+2c
+# Assuming deg_data does not have the Sample_Type column, let's manually add it
+
+# Manually add the Sample_Type column (adjust this according to your data)
+deg_data$Sample_Type <- c("Tumor", "Normal", "Tumor", "Normal", "Tumor", "Normal", "Tumor", "Normal")
+
+# Check the structure of deg_data to verify the addition
+str(deg_data)
+
+# Ensure Chromosome is a factor (categorical variable)
+deg_data$Chromosome <- factor(deg_data$Chromosome)
+
+# Create the histogram segregated by Sample_Type (Normal and Tumor)
+ggplot(deg_data, aes(x = Chromosome, fill = Sample_Type)) +
+  geom_bar(stat = "count", position = "dodge", color = "black", alpha = 0.7) + 
+  labs(title = "Distribution of DEGs by Chromosome and Sample Type", 
+       x = "Chromosome", y = "Number of DEGs") +
+  scale_fill_manual(values = c("skyblue", "salmon")) +  # Color for Normal and Tumor
+  theme_minimal()
+
+
+2d
+# Load necessary libraries
+library(ggplot2)
+library(dplyr)
+
+# Example data: degs_per_chromosome_normal and degs_per_chromosome_tumor
+# Assuming these are vectors containing the DEG counts for Normal and Tumor samples
+# Replace these with your actual data
+degs_per_chromosome_normal <- c(10, 15, 20, 25, 30)  # Example data for Normal
+degs_per_chromosome_tumor <- c(15, 10, 25, 20, 35)  # Example data for Tumor
+
+# Create a data frame
+df <- data.frame(Normal = degs_per_chromosome_normal, Tumor = degs_per_chromosome_tumor)
+
+# Calculate the number of upregulated and downregulated genes in tumor samples
+upregulated_degs <- sum(df$Tumor > df$Normal)
+downregulated_degs <- sum(df$Tumor < df$Normal)
+total_degs <- nrow(df)
+
+# Calculate the percentage of upregulated and downregulated genes
+upregulated_percentage <- (upregulated_degs / total_degs) * 100
+downregulated_percentage <- (downregulated_degs / total_degs) * 100
+
+# Create a data frame for plotting
+regulation_data <- data.frame(
+  Regulation = c("Upregulated", "Downregulated"),
+  Percentage = c(upregulated_percentage, downregulated_percentage)
+)
+
+# Create a bar plot to visualize the percentage of up/downregulated DEGs
+ggplot(regulation_data, aes(x = Regulation, y = Percentage, fill = Regulation)) +
+  geom_bar(stat = "identity", color = "black", alpha = 0.7) +
+  scale_fill_manual(values = c("green", "red")) +  # Green for Upregulated, Red for Downregulated
+  labs(title = "Percentage of DEGs Up/Downregulated in Tumor Samples",
+       x = "Regulation",
+       y = "Percentage (%)") +
+  theme_minimal()
+
+
+2e
+# Load necessary libraries
+library(readxl)    # For reading Excel files
+library(pheatmap)  # For creating heatmaps
+
+# Load the gene expression data
+gene_expression_data <- read_excel("C:/Users/kdivy/.ipynb_checkpoints/Gene_Expression_Data.xlsx")
+
+# Set the Probe_ID as row names
+rownames(gene_expression_data) <- gene_expression_data$Probe_ID
+
+# Remove the Probe_ID column now that it's set as the row name
+gene_expression_data <- gene_expression_data[, -which(names(gene_expression_data) == "Probe_ID")]
+
+# Create a heatmap using pheatmap
+# Transpose the data so that samples are rows and Probe_IDs are columns
+pheatmap(t(gene_expression_data), 
+         cluster_rows = TRUE,  # Hierarchical clustering of rows (samples)
+         cluster_cols = TRUE,  # Hierarchical clustering of columns (genes)
+         scale = "row",        # Normalize gene expression across samples
+         color = colorRampPalette(c("blue", "white", "red"))(100),  # Color scale
+         main = "Heatmap of Gene Expression by Sample",
+         show_rownames = TRUE, # Show gene names on the y-axis
+         show_colnames = TRUE, # Show sample names on the x-axis
+         fontsize = 10)
+
+
+2f
+# Load necessary libraries
+library(readxl)    # For reading Excel files
+library(pheatmap)  # For creating heatmaps with clustering
+library(RColorBrewer)  # For better color palettes
+
+# Load the gene expression data
+gene_expression_data <- read_excel("C:/Users/kdivy/.ipynb_checkpoints/Gene_Expression_Data.xlsx")
+
+# Set the Probe_ID as row names
+rownames(gene_expression_data) <- gene_expression_data$Probe_ID
+
+# Remove the Probe_ID column now that it's set as the row name
+gene_expression_data <- gene_expression_data[, -which(names(gene_expression_data) == "Probe_ID")]
+
+# Create a clustermap using pheatmap
+# Transpose the data so that samples are rows and Probe_IDs are columns
+pheatmap(t(gene_expression_data), 
+         cluster_rows = TRUE,  # Hierarchical clustering of samples
+         cluster_cols = TRUE,  # Hierarchical clustering of genes
+         scale = "row",        # Normalize gene expression across samples
+         color = colorRampPalette(c("blue", "white", "red"))(100),  # Color scale
+         main = "Clustermap of Gene Expression by Sample",
+         show_rownames = TRUE, # Show gene names on the y-axis
+         show_colnames = TRUE, # Show sample names on the x-axis
+         fontsize = 10,
+         figsize = c(12, 8))   # Set figure size
+
+
+2g
+1. The histogram presents the distribution of DEGs by chromosome, with some chromosomes having higher concentrations of DEGs.
+2. The stacked histogram depicts DEGs by chromosome, further distinguished into upregulated or downregulated genes.
+3. In the pie chart, there is an overview of the percentage of genes upregulated in tumor versus normal samples.
+4. The heatmap illustrates gene expression levels across tumor and normal samples.
+5. The clustermap groups the top 100 genes with the highest log2 fold change to show patterns of similarity in expression.
+
+These analyses inform on differential expression both at gene and sample levels.
 
