@@ -1,1 +1,132 @@
+1a.
+# Load necessary libraries
+library(readxl)
+
+# Load the data files
+gene_expression_data <- read_excel("Gene_Expression_Data.xlsx")
+gene_information <- read.csv("Gene_Information.csv")
+sample_information <- read.delim("Sample_Information.tsv", sep = "\t")
+
+# Print the loaded data
+cat("Gene Expression Data:\n")
+print(head(gene_expression_data))
+
+cat("\nGene Information:\n")
+print(head(gene_information))
+
+cat("\nSample Information:\n")
+print(head(sample_information))
+
+
+
+1a
+library(readxl)  # For reading Excel files
+library(data.table)  # For reading CSV and TSV files
+
+# Load Gene Expression Data from Excel file
+gene_expression_data <- read_excel("Gene_Expression_Data.xlsx")
+
+# Load Gene Information from CSV file
+gene_information <- fread("Gene_Information.csv")
+
+# Load Sample Information from TSV file
+sample_information <- fread("Sample_Information.tsv", header = TRUE)
+
+# Inspect the first few rows of each data frame
+head(gene_expression_data)
+head(gene_information)
+head(sample_information)
+
+
+1b
+# Extract phenotype information from sample_information
+phenotype <- sample_information$group
+names(phenotype) <- rownames(sample_information)
+
+# Update column names in gene_expression_data
+new_colnames <- colnames(gene_expression_data)
+new_colnames[-1] <- sapply(new_colnames[-1], function(x) paste0(x, "_", phenotype[x]))
+colnames(gene_expression_data) <- new_colnames
+
+# Print the updated gene expression data with new column names
+cat("\nUpdated Gene Expression Data (with renamed columns):\n")
+print(head(gene_expression_data))
+
+
+1c
+# Filter columns for tumor and normal data
+tumor_data <- gene_expression_data[, grepl("_tumor", colnames(gene_expression_data))]
+normal_data <- gene_expression_data[, grepl("_normal", colnames(gene_expression_data))]
+
+# Add the Probe_ID back to each dataset
+tumor_data <- cbind(Probe_ID = gene_expression_data$Probe_ID, tumor_data)
+normal_data <- cbind(Probe_ID = gene_expression_data$Probe_ID, normal_data)
+
+# Print the tumor and normal datasets
+cat("\nTumor Data:\n")
+print(head(tumor_data))
+
+cat("\nNormal Data:\n")
+print(head(normal_data))
+
+
+
+1d
+# Compute average expression for tumor and normal datasets
+tumor_avg_expression <- rowMeans(tumor_data[,-1], na.rm = TRUE)
+normal_avg_expression <- rowMeans(normal_data[,-1], na.rm = TRUE)
+
+# Print the average expressions
+cat("\nAverage Expression for Tumor Data:\n")
+print(tumor_avg_expression)
+
+cat("\nAverage Expression for Normal Data:\n")
+print(normal_avg_expression)
+
+
+
+1e
+# Compute log2 fold change
+log2_fold_change <- log2((tumor_avg_expression - normal_avg_expression) / normal_avg_expression)
+
+# Combine results with Probe_ID
+results <- data.frame(
+  Probe_ID = tumor_data$Probe_ID,
+  Tumor_Avg = tumor_avg_expression,
+  Normal_Avg = normal_avg_expression,
+  Log2_Fold_Change = log2_fold_change
+)
+
+# Print the log2 fold change results
+cat("\nLog2 Fold Change Results:\n")
+print(head(results))
+
+
+1f
+# Merge results with gene information
+merged_results <- merge(results, gene_information, by = "Probe_ID")
+
+# Add absolute fold change column
+merged_results$Abs_Log2_Fold_Change <- abs(merged_results$Log2_Fold_Change)
+
+# Filter genes with absolute fold change magnitude > 5
+significant_genes <- merged_results[merged_results$Abs_Log2_Fold_Change > 5, ]
+
+# Print significant genes
+cat("\nSignificant Genes (Fold Change Magnitude > 5):\n")
+print(head(significant_genes))
+
+
+1e
+# Add a column to indicate whether the gene is higher expressed in "Normal" or "Tumor"
+significant_genes$Higher_Expression <- ifelse(
+  significant_genes$Log2_Fold_Change > 0, "Tumor", "Normal"
+)
+
+# Print updated significant genes
+cat("\nSignificant Genes with Higher Expression Column:\n")
+print(head(significant_genes))
+
+
+
 
