@@ -263,6 +263,5 @@ pheatmap(t(gene_expression_data),
 3. In the pie chart, there is an overview of the percentage of genes upregulated in tumor versus normal samples.
 4. The heatmap illustrates gene expression levels across tumor and normal samples.
 5. The clustermap groups the top 100 genes with the highest log2 fold change to show patterns of similarity in expression.
-
 These analyses inform on differential expression both at gene and sample levels.
 
